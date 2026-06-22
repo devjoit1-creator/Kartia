@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" class="has-aside-left has-aside-mobile-transition has-navbar-fixed-top has-aside-expanded">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bulma Framework -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.min.css') }}">
+    <!--<link rel="stylesheet" href="{{ url_for('static', filename='css/bulma-tooltip.min.css') }}"> -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-tooltip@3.0.2/dist/css/bulma-tooltip.min.css"> -->
+    <!-- Fuentes -->
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico')}}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/materialdesignicons.min.css') }}"> -->
+    <!-- CSS Datatables -->
+    <!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.1/css/bulma.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bulma.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/dataTables.bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
+    
+    {% block css %}
+    {% endblock %}
+    <title>{% block title %}{% endblock %} - Kartia</title>
+</head>
+<body>
+    <div class="app">
+        <nav id="navbar-main" class="navbar is-fixed-top" role="navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item is-hidden-desktop jb-aside-mobile-toggle">
+                    <span class="icon"><i class="mdi mdi-forwardburger mdi-24px"></i></span>
+                </a>
+                <div class="navbar-item has-control">
+                    <div class="control"><input placeholder="v. 1.0.0" class="input" disabled></div>
+                </div>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item has-dropdown has-dropdown-with-icons has-divider is-hoverable">
+                    <a class="navbar-link is-arrowless">
+                      <span class="icon"><i class="mdi mdi-home-account"></i></span>
+                      <span>{{ session['name'] }}</span>
+                      <span class="icon"><i class="mdi mdi-menu-down"></i></span>
+                      <span hidden>
+                        <input type="text" name="profile" id="profile" class="input is-small" value="" readonly hidden>
+                      </span>
+                    </a>
+                    <div class="navbar-dropdown">
+                        <a href="https://api.whatsapp.com/send/?phone=573017094993&text=Hola+necesito+soporte&type=phone_number&app_absent=0" target="_blank" class="navbar-item">
+                            <span class="icon"><i class="mdi mdi-chat-question" aria-hidden="true"></i></span>
+                            <span>¿Necesita Soporte?</span>
+                        </a>
+                        <a href="{{ url_for('Index.logout') }}" class="navbar-item">
+                            <span class="icon"><i class="mdi mdi-exit-to-app" aria-hidden="true"></i></span>
+                            <span>Cerrar Sesión</span>
+                        </a>
+                    </div>
+            </div>
+        </nav>
+        <aside class="aside is-placed-left is-expanded">
+            <div class="aside-tools">
+                <div class="aside-tools-label">
+                    <a href="#" style="color: white; align-items: center;">
+                        <p>KARTIA POS & CRM</p>
+                </div>
+            </div>
+            <div class="menu is-menu-main">
+                <p class="menu-label" style="color: white;">Menú Principal</p>
+                
+            </div>
+        </aside>
+        <section class="section is-main-section">
+            {% block content %}
+            {% endblock %}
+        </section>
+    </div>
+</body>
+
+<script src="{{ url_for('static', filename='js/main.min.js') }}"></script>
+<!-- Scripts DataTables -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bulma.js"></script>
+{% block scripts %}
+{% endblock %}
+</html>
