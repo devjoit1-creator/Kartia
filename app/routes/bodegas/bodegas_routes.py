@@ -8,12 +8,20 @@ bp_bodegas = Blueprint("Bodegas", __name__)
 def bodegas():
     return render_template('tplBodegas/bodegas.html')
 
+@bp_bodegas.get('/getBodegas')
+def getBodegas():
+    try:
+        bodegas = bodegas_service.listBodegas()
+        return jsonify(bodegas), 200
+    
+    except Exception as ex:
+        return jsonify({"error": f"{ex}"}), 500
+
 @bp_bodegas.post('/addBodega')
 def addBodega():
     try:
-        data = request.get_json()
-        idBodega = data.get("id")
-        nomBodega = data.get("nombre")
+        idBodega = request.form.get("idBodega")
+        nomBodega = request.form.get("nomBodega")
         bodegas_service.insertBodega(idBodega, nomBodega)
 
         return jsonify({"message": "Bodega Creada Exitosamente"}), 201
