@@ -1,0 +1,71 @@
+{% extends 'menu.html' %}
+
+{% block css %}
+
+{% endblock %}
+{% block title %}Bodegas{% endblock %}
+
+{% block content %}
+<h5 class="title is-5">Bodegas</h5>
+<div class="container">
+    <div class="field is-grouped">
+        <p class="control">
+            <a id="btnNuevaBodega" href="" class="has-icon button is-normal is-primary">
+                <span class="icon"><i class="mdi mdi-plus"></i></span>
+                <span>Nueva Bodega</span>
+            </a>
+        </p>
+    </div>
+</div>
+
+<!-- Modal Nueva Bodega -->
+<div id="modalNuevaBodega" class="modal is-hidden">
+    <div class="modal-background"></div>
+    <form id="formNuevaBodega" action="#" method="post">
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Nueva Bodega</p>
+            </header>
+            <section class="modal-card-body">
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label for="idBodega" class="label">ID: <strong style="color: red;">*</strong></label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <input type="text" name="idBodega" id="idBodega" class="input" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label for="nomBodega" class="label">Nombre: <strong style="color: red;">*</strong></label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <input type="text" name="nomBodega" id="nomBodega" class="input" required>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <div class="buttons">
+                    <button id="btnGuardar" class="has-icon button is-normal is-success">
+                        <span class="icon"><i class="mdi mdi-floppy"></i></span>
+                        <span>Guardar</span>
+                    </button>
+                    <a id="btnCancelar" class="has-icon button is-normal is-danger">
+                        <span class="icon"><i class="mdi mdi-cancel"></i></span>
+                        <span>Cancelar</span>
+                    </a>
+                </div>
+            </footer>
+        </div>    
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static', filename='js/bodegas/bodegas.js') }}"></script>
+{% endblock %}

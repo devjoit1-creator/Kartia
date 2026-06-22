@@ -62,11 +62,48 @@
                 <div class="aside-tools-label">
                     <a href="#" style="color: white; align-items: center;">
                         <p>KARTIA POS & CRM</p>
+                    </a>
                 </div>
             </div>
             <div class="menu is-menu-main">
                 <p class="menu-label" style="color: white;">Menú Principal</p>
-                
+                <ul class="menu-list">
+                    <li class="is-active">
+                        <a class="has-icon has-dropdown-icon">
+                            <span class="icon"><i class="mdi mdi-view-list"></i></span>
+                            <span class="menu-item-label">Parametros</span>
+                            <div class="dropdown-icon">
+                                <span class="icon"><i class="mdi mdi-minus"></i></span>
+                            </div>
+                        </a>
+                        <ul>
+                            <li>
+                                <a class="has-icon" href="#">
+                                    <span class="icon"><i class="mdi mdi-domain"></i></span>
+                                    <span>Datos de Entidad</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="has-icon" href="#">
+                                    <span class="icon"><i class="mdi mdi-table-account"></i></span>
+                                    <span>Perfil de Usuarios</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="has-icon" href="#">
+                                    <span class="icon"><i class="mdi mdi-account-group"></i></span>
+                                    <span>Usuarios</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="has-icon" href="{{ url_for('Bodegas.bodegas') }}">
+                                    <span class="icon"><i class="mdi mdi-storage-tank"></i></span>
+                                    <span>Bodegas</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </aside>
         <section class="section is-main-section">

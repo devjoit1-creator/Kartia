@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, session, flash
 from flask_bcrypt import Bcrypt
 
 from app.routes.index.index_routes import bp_index
+from app.routes.bodegas.bodegas_routes import bp_bodegas
 
 def create_new():
     app = Flask(__name__, template_folder='templates')
@@ -10,6 +11,7 @@ def create_new():
 
     #Registro de Blueprints
     app.register_blueprint(bp_index)
+    app.register_blueprint(bp_bodegas)
 
     @app.before_request
     def verify():
