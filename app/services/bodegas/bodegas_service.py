@@ -76,13 +76,14 @@ def listBodegas():
 
 #Metodo Listar Bodega por ID
 def listBodegaId(idBodega):
-    bodega = None
+    bodega = []
     conn = db.connection()
     operation = """ SELECT * FROM bodegas WHERE idBodega = %s """
     try:
         with conn.cursor() as cursor:
-            cursor.execute(operation)
-            bodega = cursor.fetchone()
+            cursor.execute(operation, (idBodega, ))
+            for row in cursor.fetchall():
+                bodega.append({'idBodega': row[0], 'nomBodega': row[1]})
 
         return bodega
     

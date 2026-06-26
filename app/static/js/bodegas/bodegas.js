@@ -1,11 +1,12 @@
 //Constantes
 const btnNuevaBodega = document.getElementById("btnNuevaBodega");
 const searchInput = document.getElementById("searchInput");
-const modalNuevaBodega = document.getElementById("modalNuevaBodega");
+const modalBodega = document.getElementById("modalBodega");
 const idBodega = document.getElementById("idBodega");
 const nomBodega = document.getElementById("nomBodega");
-const formNuevaBodega = document.getElementById("formNuevaBodega");
+const formBodega = document.getElementById("formBodega");
 const btnGuardar = document.getElementById("btnGuardar");
+const btnActualizar = document.getElementById("btnActualizar");
 const btnCancelar = document.getElementById("btnCancelar");
 const tablaBodegas = document.getElementById("tablaBodegas");
 
@@ -17,23 +18,55 @@ nomBodega.addEventListener("keyup", () => {
 
 //Activar Modal
 const activarModal = () => {
-    modalNuevaBodega.classList.remove("is-hidden");
-    modalNuevaBodega.classList.add("is-active");
+    modalBodega.classList.remove("is-hidden");
+    modalBodega.classList.add("is-active");
+    btnGuardar.classList.add("is-active");
+    btnGuardar.classList.remover("is-hidden");
+    btnActualizar.classList.add("is-hidden");
+    btnActualizar.classList.remove("is-active");
+    
 };
 btnNuevaBodega.addEventListener("click", (e) => {
     e.preventDefault();
     activarModal();
 });
 
+//Activar Modal Bodega Editar
+const activarModalEditar = (id) => {
+    modalBodega.classList.remove("is-hidden");
+    modalBodega.classList.add("is-active");
+    idBodega.setAttribute("readonly", true);
+    btnActualizar.classList.remove("is-hidden");
+    btnActualizar.classList.add("is-active");
+    btnGuardar.classList.remove("is-active");
+    btnGuardar.classList.add("is-hidden");
+    fetch(`/getBodegasId/${id}`, {
+        method: "GET"
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(!Array.isArray(data) || data.length === 0){
+            alert("No hay datos");
+            return;
+        };
+        
+        data.forEach(bodega => {
+            idBodega.value = bodega.idBodega;
+            nomBodega.value = bodega.nomBodega;
+            btnActualizar.dataset.idOriginal = bodega.idBodega;
+        });
+    })
+}
+
 //Desactivar Modal
 const desactivarModal = () => {
-    modalNuevaBodega.classList.add("is-hidden");
-    modalNuevaBodega.classList.remove("is-active");
+    modalBodega.classList.add("is-hidden");
+    modalBodega.classList.remove("is-active");
 };
 
 btnCancelar.addEventListener("click", (e) => {
     e.preventDefault();
-    formNuevaBodega.reset();
+    formBodega.reset();
     desactivarModal();
 });
 
@@ -78,11 +111,20 @@ const renderTabla = () => {
         tr.innerHTML = `
             <td>${bodega.idBodega}</td>
             <td>${bodega.nomBodega}</td>
+            <td>
+                <a onclick="activarModalEditar('${bodega.idBodega}')" class="has-icon button is-small is-info has-tooltip-bottom" data-tooltip="Editar" style="padding: 0em 1.0em">
+                    <span class="icon"><i class="mdi mdi-pencil"></i></span>
+                </a>
+                <a onclick="eliminarBodega('${bodega.idBodega}')" class="has-icon button is-small is-danger has-tooltip-bottom" data-tooltip="Eliminar" style="padding: 0em 1.0em">
+                    <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                </a>
+            </td>
         `
         tbody.appendChild(tr);
     });
 };
 
+//Paginacion de filas en tabla
 const renderPaginas = () => {
     const paginacionList = document.getElementById("paginationList");
     paginacionList.innerHTML = '';
@@ -131,7 +173,7 @@ searchInput.addEventListener("input", (e) => {
 });
 
 // Async guardar nueva bodega
-formNuevaBodega.addEventListener("submit", async (e) => {
+formBodega.addEventListener("submit", async (e) => {
     e.preventDefault();
     const dataForm = new FormData(e.target);
     try {
@@ -154,7 +196,7 @@ formNuevaBodega.addEventListener("submit", async (e) => {
             return;
         };
 
-        formNuevaBodega.reset();
+        formBodega.reset();
         getBodegas();
         desactivarModal();
         Toastify({
@@ -176,6 +218,92 @@ formNuevaBodega.addEventListener("submit", async (e) => {
         }).showToast();
     }
 });
+
+//Async Actualizar Datos Bodega
+btnActualizar.addEventListener("click", async () => {
+    const datosForm = new FormData(formBodega);
+    const idOriginal = btnActualizar.dataset.idOriginal;
+
+    try {
+        const response = await fetch('/editBodega', {
+            method: "POST",
+            body: datosForm
+        });
+
+        const result = await response.json();
+
+        if(!response.ok){
+            throw new Error(result.Error);
+            Toastify({
+                text: `Se presentó un error: ${result.Error}`,
+                className: "error",
+                style: {
+                    background: "linear-gradient(to right, #b01500, #c93d3d)",
+                }
+            }).showToast();
+            return;
+        };
+
+        formBodega.reset();
+        getBodegas();
+        desactivarModal();
+        Toastify({
+            text: `${result.message}`,
+            className: "success",
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            }
+        }).showToast();
+    } catch (err) {
+        console.error("error: ", err)
+        Toastify({
+            text: `Se presentó un error: ${err}`,
+            className: "error",
+            style: {
+                background: "linear-gradient(to right, #b01500, #c93d3d)",
+            }
+        }).showToast();
+    }
+})
+
+// Async Eliminar Bodega de BD
+const eliminarBodega = async (id) => {
+    if(confirm("Desea Eliminar esta bodega ?")){
+        try {
+            const response = await fetch(`/deleteBodega/${id}`)
+            const result = await response.json()
+            if(!response.ok){
+                throw new Error(result.Error);
+                Toastify({
+                    text: `Se presentó un error: ${result.Error}`,
+                    className: "error",
+                    style: {
+                        background: "linear-gradient(to right, #b01500, #c93d3d)",
+                    }
+                }).showToast();
+                return;
+            }
+
+            getBodegas();
+            Toastify({
+                text: `${result.message}`,
+                className: "success",
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                }
+            }).showToast();
+        } catch (error) {
+            console.error("error: ", err)
+            Toastify({
+                text: `Se presentó un error: ${err}`,
+                className: "error",
+                style: {
+                    background: "linear-gradient(to right, #b01500, #c93d3d)",
+                }
+            }).showToast();
+        }
+    }
+};
 
 // Cargar Datos
 document.addEventListener("DOMContentLoaded", () => {
