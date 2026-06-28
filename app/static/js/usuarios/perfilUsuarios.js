@@ -1,46 +1,43 @@
 //Constantes
-const btnNuevaBodega = document.getElementById("btnNuevaBodega");
+const idRol = document.getElementById("idRol");
+const nomRol = document.getElementById("nomRol");
+const descripcionRol = document.getElementById("descripcionRol");
 const searchInput = document.getElementById("searchInput");
-const modalBodega = document.getElementById("modalBodega");
-const idBodega = document.getElementById("idBodega");
-const nomBodega = document.getElementById("nomBodega");
-const formBodega = document.getElementById("formBodega");
+const perfilesTbody = document.getElementById("perfilesTbody");
+const modalPerfiles = document.getElementById("modalPerfiles");
+const formPerfil = document.getElementById("formPerfil");
+const btnNuevoPerfil = document.getElementById("btnNuevoPerfil");
 const btnGuardar = document.getElementById("btnGuardar");
 const btnActualizar = document.getElementById("btnActualizar");
 const btnCancelar = document.getElementById("btnCancelar");
-const tablaBodegas = document.getElementById("tablaBodegas");
-
 
 //Uppercase
-nomBodega.addEventListener("keyup", () => {
-    nomBodega.value = nomBodega.value.toUpperCase();
+nomRol.addEventListener("keyup", () => {
+    nomRol.value = nomRol.value.toUpperCase();
 });
 
-//Activar Modal
+descripcionRol.addEventListener("keyup", () => {
+    descripcionRol.value = descripcionRol.value.toUpperCase();
+});
+
+//Activar Modal Nuevo Perfil
 const activarModal = () => {
-    modalBodega.classList.remove("is-hidden");
-    modalBodega.classList.add("is-active");
-    btnGuardar.classList.add("is-active");
-    btnGuardar.classList.remover("is-hidden");
-    btnActualizar.classList.add("is-hidden");
-    btnActualizar.classList.remove("is-active");
-    
+    modalPerfiles.classList.remove("is-hidden");
+    modalPerfiles.classList.add("is-active");
 };
-btnNuevaBodega.addEventListener("click", (e) => {
+btnNuevoPerfil.addEventListener("click", (e) => {
     e.preventDefault();
     activarModal();
 });
 
-//Activar Modal Bodega Editar
 const activarModalEditar = (id) => {
-    modalBodega.classList.remove("is-hidden");
-    modalBodega.classList.add("is-active");
-    idBodega.setAttribute("readonly", true);
+    modalPerfiles.classList.remove("is-hidden");
+    modalPerfiles.classList.add("is-active");
     btnActualizar.classList.remove("is-hidden");
     btnActualizar.classList.add("is-active");
     btnGuardar.classList.remove("is-active");
     btnGuardar.classList.add("is-hidden");
-    fetch(`/getBodegasId/${id}`, {
+    fetch(`/getPerfilId/${id}`, {
         method: "GET"
     })
     .then(response => response.json())
@@ -49,41 +46,43 @@ const activarModalEditar = (id) => {
             alert("No hay datos");
             return;
         };
-        
-        data.forEach(bodega => {
-            idBodega.value = bodega.idBodega;
-            nomBodega.value = bodega.nomBodega;
-            btnActualizar.dataset.idOriginal = bodega.idBodega;
+
+        data.forEach(perfil => {
+            idRol.value = perfil.idRol;
+            nomRol.value = perfil.nomRol;
+            descripcionRol.value = perfil.descripcionRol;
+            btnActualizar.dataset.idOriginal = perfil.idRol;
         });
     })
+    .catch(error => console.error("error: ", error))
 }
 
 //Desactivar Modal
 const desactivarModal = () => {
-    modalBodega.classList.add("is-hidden");
-    modalBodega.classList.remove("is-active");
+    modalPerfiles.classList.remove("is-active");
+    modalPerfiles.classList.add("is-hidden");
 };
-
 btnCancelar.addEventListener("click", (e) => {
     e.preventDefault();
-    formBodega.reset();
+    formPerfil.reset();
     desactivarModal();
 });
 
+
 //Datos en Tabla
-let allBodegas = [];
-let filteredBodegas = [];
+let allPerfiles = [];
+let filteredPerfiles = [];
 let currentPage = 1;
 const rowsPerPage = 5;
-const getBodegas = async () => {
+const getPerfiles = async () => {
     try {
-        const response = await fetch("/getBodegas");
+        const response = await fetch("/getPerfiles");
         if(!response.ok) throw new Error('Error cargando los datos');
 
         const result = await response.json();
-        allBodegas = result;
+        allPerfiles = result;
 
-        filteredBodegas = [...allBodegas];
+        filteredPerfiles = [...allPerfiles];
         renderTabla();
         renderPaginas();
     } catch (err) {
@@ -92,30 +91,31 @@ const getBodegas = async () => {
 };
 
 const renderTabla = () => {
-    const tbody = document.getElementById("bodegasTbody");
+    const tbody = perfilesTbody;
     tbody.innerHTML = '';
 
     const inicio = (currentPage - 1) * rowsPerPage;
     const fin = inicio + rowsPerPage;
-    const datosPagina = filteredBodegas.slice(inicio, fin);
+    const datosPagina = filteredPerfiles.slice(inicio, fin);
 
     if(datosPagina.length === 0) {
         tbody.innerHTML = `
-            <tr><td colspan="3" class="has-text-centered">No se encontraron resultados</td></tr>
+            <tr><td colspan="4" class="has-text-centered">No se encontraron resultados</td></tr>
         `
         return;  
     };
 
-    datosPagina.forEach(bodega => {
+    datosPagina.forEach(perfil => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${bodega.idBodega}</td>
-            <td>${bodega.nomBodega}</td>
+            <td>${perfil.idRol}</td>
+            <td>${perfil.nomRol}</td>
+            <td>${perfil.descripcionRol}</td>
             <td>
-                <a onclick="activarModalEditar('${bodega.idBodega}')" class="has-icon button is-small is-info has-tooltip-bottom" data-tooltip="Editar" style="padding: 0em 1.0em">
+                <a onclick="activarModalEditar('${perfil.idRol}')" class="has-icon button is-small is-info has-tooltip-bottom" data-tooltip="Editar" style="padding: 0em 1.0em">
                     <span class="icon"><i class="mdi mdi-pencil"></i></span>
                 </a>
-                <a onclick="eliminarBodega('${bodega.idBodega}')" class="has-icon button is-small is-danger has-tooltip-bottom" data-tooltip="Eliminar" style="padding: 0em 1.0em">
+                <a onclick="eliminarPerfil('${perfil.idRol}')" class="has-icon button is-small is-danger has-tooltip-bottom" data-tooltip="Eliminar" style="padding: 0em 1.0em">
                     <span class="icon"><i class="mdi mdi-trash-can"></i></span>
                 </a>
             </td>
@@ -129,7 +129,7 @@ const renderPaginas = () => {
     const paginacionList = document.getElementById("paginationList");
     paginacionList.innerHTML = '';
 
-    const totalPages = Math.ceil(filteredBodegas.length / rowsPerPage);
+    const totalPages = Math.ceil(filteredPerfiles.length / rowsPerPage);
     if (totalPages <= 1 ) return;
 
     for (let i = 1; i <= totalPages; i++) {
@@ -160,11 +160,12 @@ const renderPaginas = () => {
 //Filtrar Datos
 searchInput.addEventListener("input", (e) => {
     const termino = e.target.value.toLowerCase().trim();
-    filteredBodegas = allBodegas.filter(bodega => {
-        const id = String(bodega.idBodega || '').toLowerCase();
-        const nombre = String(bodega.nomBodega || '').toLowerCase();
+    filteredPerfiles = allPerfiles.filter(perfil => {
+        const id = String(perfil.idRol || '').toLowerCase();
+        const nombre = String(perfil.nomRol || '').toLowerCase();
+        const descripcion = String(perfil.descripcionRol || '').toLowerCase();
 
-        return id.includes(termino) || nombre.includes(termino);
+        return id.includes(termino) || nombre.includes(termino) || descripcion.includes(termino);
     });
 
     currentPage = 1;
@@ -172,12 +173,12 @@ searchInput.addEventListener("input", (e) => {
     renderPaginas();
 });
 
-// Async guardar nueva bodega
-formBodega.addEventListener("submit", async (e) => {
+//Async Guardar Nuevo Perfil
+formPerfil.addEventListener("submit", async (e) => {
     e.preventDefault();
     const dataForm = new FormData(e.target);
     try {
-        const response = await fetch("/addBodega", {
+        const response = await fetch('/addPerfil', {
             method: "POST",
             body: dataForm
         });
@@ -196,8 +197,8 @@ formBodega.addEventListener("submit", async (e) => {
             return;
         };
 
-        formBodega.reset();
-        getBodegas();
+        formPerfil.reset();
+        getPerfiles();
         desactivarModal();
         Toastify({
             text: `${result.message}`,
@@ -206,7 +207,8 @@ formBodega.addEventListener("submit", async (e) => {
                 background: "linear-gradient(to right, #00b09b, #96c93d)",
             }
         }).showToast();
-        
+
+
     } catch (err) {
         console.error("error: ", err)
         Toastify({
@@ -219,21 +221,20 @@ formBodega.addEventListener("submit", async (e) => {
     }
 });
 
-//Async Actualizar Datos Bodega
+//Async Actualizar datos de perfil
 btnActualizar.addEventListener("click", async () => {
-    const datosForm = new FormData(formBodega);
+    const datosForm = new FormData(formPerfil);
     const idOriginal = btnActualizar.dataset.idOriginal;
 
-    try {
-        const response = await fetch('/editBodega', {
+    try{
+        const response = await fetch("/editPerfil", {
             method: "POST",
             body: datosForm
         });
 
         const result = await response.json();
-
         if(!response.ok){
-            throw new Error(result.Error);
+            throw new Error(result.Error)
             Toastify({
                 text: `Se presentó un error: ${result.Error}`,
                 className: "error",
@@ -244,8 +245,8 @@ btnActualizar.addEventListener("click", async () => {
             return;
         };
 
-        formBodega.reset();
-        getBodegas();
+        formPerfil.reset();
+        getPerfiles();
         desactivarModal();
         Toastify({
             text: `${result.message}`,
@@ -266,14 +267,14 @@ btnActualizar.addEventListener("click", async () => {
     }
 })
 
-// Async Eliminar Bodega de BD
-const eliminarBodega = async (id) => {
-    if(confirm("Desea Eliminar esta bodega ?")){
+// Async Eliminar Perfil de usuario
+const eliminarPerfil = async (id) => {
+    if(confirm("Desea eliminar este Perfil ?")){
         try {
-            const response = await fetch(`/deleteBodega/${id}`)
-            const result = await response.json()
+            const response = await fetch(`/deletePerfil/${id}`);
+            const result = await response.json();
             if(!response.ok){
-                throw new Error(result.Error);
+                throw new Error(result.Error)
                 Toastify({
                     text: `Se presentó un error: ${result.Error}`,
                     className: "error",
@@ -282,9 +283,9 @@ const eliminarBodega = async (id) => {
                     }
                 }).showToast();
                 return;
-            }
+            };
 
-            getBodegas();
+            getPerfiles();
             Toastify({
                 text: `${result.message}`,
                 className: "success",
@@ -292,6 +293,7 @@ const eliminarBodega = async (id) => {
                     background: "linear-gradient(to right, #00b09b, #96c93d)",
                 }
             }).showToast();
+
         } catch (err) {
             console.error("error: ", err)
             Toastify({
@@ -301,11 +303,11 @@ const eliminarBodega = async (id) => {
                     background: "linear-gradient(to right, #b01500, #c93d3d)",
                 }
             }).showToast();
-        }
-    }
+        };
+    };
 };
 
 // Cargar Datos
 document.addEventListener("DOMContentLoaded", () => {
-    getBodegas();
+    getPerfiles();
 });
