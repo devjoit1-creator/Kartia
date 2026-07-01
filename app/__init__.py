@@ -3,6 +3,7 @@ from flask_bcrypt import Bcrypt
 
 from app.routes.index.index_routes import bp_index
 from app.routes.usuarios.perfilUsuarios_routes import bp_perfilUsuarios
+from app.routes.usuarios.usuarios_routes import bp_usuarios
 from app.routes.bodegas.bodegas_routes import bp_bodegas
 
 
@@ -14,6 +15,7 @@ def create_new():
     #Registro de Blueprints
     app.register_blueprint(bp_index)
     app.register_blueprint(bp_perfilUsuarios)
+    app.register_blueprint(bp_usuarios)
     app.register_blueprint(bp_bodegas)
 
     @app.before_request

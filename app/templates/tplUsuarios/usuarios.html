@@ -1,0 +1,141 @@
+{% extends 'menu.html' %}
+
+{% block css %}
+
+{% endblock %}
+{% block title %} Usuarios {% endblock %}
+
+{% block content %}
+<h5 class="title is-5">Usuarios</h5>
+<div class="container">
+    <div class="field is-grouped">
+        <p class="control">
+            <a id="btnNuevoUsuario" class="has-icon button is-normal is-primary">
+                <span class="icon"><i class="mdi mdi-plus"></i></span>
+                <span>Nuevo Usuario</span>
+            </a>
+        </p>
+        <p class="control has-icons-left">
+            <input type="text" name="searchInput" id="searchInput" class="input is-normal" placeholder="Filtrar">
+            <span class="icon is-left"><i class="mdi mdi-table-search"></i></span>
+        </p>
+    </div>
+    <h6 class="title is-6">Listado de Usuarios</h6>
+    <table class="table is-striped" style="width: 100%;">
+        <thead>
+            <tr>
+
+            </tr>
+        </thead>
+        <tbody id="usuariosTbody">
+
+        </tbody>
+    </table>
+    <nav class="pagination is-small is-centered" role="navigation" aria-label="pagination">
+        <ul class="pagination-list" id="paginationList">
+
+        </ul>
+    </nav>
+</div>
+
+<!-- Modal Usuarios -->
+<div id="modalUsuarios" class="modal is-hidden">
+    <div class="modal-background"></div>
+    <form id="formUsuarios" action="#" method="post">
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Datos de Usuario</p>
+            </header>
+            <section class="modal-card-body">
+                <input type="text" name="idUsuario" id="idUsuario" class="input is-small is-hidden" hidden>
+                <div class="field is-horizontal">
+                    <div class="field-label" style="font-size: small;">
+                        <label for="usuario" class="label is-small">Usuario: <strong style="color: red;">*</strong></label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <input type="text" name="usuario" id="usuario" class="input is-small" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label" style="font-size: small;">
+                        <label for="passwd" class="label is-small">Contrs: <strong style="color: red;">*</strong></label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <input type="password" name="passwd" id="passwd" class="input is-small" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label" style="font-size: small;">
+                        <label for="nomUsuario" class="label is-small">Nombre: <strong style="color: red;">*</strong></label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <input type="text" name="nomUsuario" id="nomUsuario" class="input is-small" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label" style="font-size: small;">
+                        <label for="rolId" class="label is-small">Perfil: <strong style="color: red;">*</strong></label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <span class="select is-small">
+                                <select name="rolId" id="rolId" required>
+                                    <option value=""></option>
+                                    {% for perfil in perfiles %}
+                                    <option value="{{ perfil.idRol }}">{{ perfil.nomRol }}</option>
+                                    {% endfor %}
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label" style="font-size: small;">
+                        <label for="isActive" class="label is-small">Estado: <strong style="color: red;">*</strong></label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <label class="radio">
+                                    <input type="radio" name="isActive" id="isActive" value="1" required/>
+                                    Activo
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="isActive" id="isActive" value="0" required/>
+                                    Inactivo
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <div class="buttons">
+                    <button id="btnGuardar" type="submit" class="has-icon button is-normal is-success">
+                        <span class="icon"><i class="mdi mdi-floppy"></i></span>
+                        <span>Guardar</span>
+                    </button>
+                    <button id="btnActualizar" type="button" class="has-icon button is-normal is-success is-hidden">
+                        <span class="icon"><i class="mdi mdi-pencil"></i></span>
+                        <span>Actualizar</span>
+                    </button>
+                    <a id="btnCancelar" class="has-icon button is-normal is-danger">
+                        <span class="icon"><i class="mdi mdi-cancel"></i></span>
+                        <span>Cancelar</span>
+                    </a>
+                </div>
+            </footer>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/usuarios/usuarios.js') }}"></script>
+{% endblock %}
