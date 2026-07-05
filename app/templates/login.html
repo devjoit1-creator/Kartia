@@ -4,9 +4,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main.min.css') }}">
 <!-- <link rel="stylesheet" href="https://jenil.github.io/bulmaswatch/sandstone/bulmaswatch.min.css"> -->
 <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico')}}" type="image/x-icon">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/sweetalert2.min.css')}}">
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/sweetalert2.min.css')}}"> --> 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome-4.7.0/css/font-awesome.min.css')}}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/login-css.css')}}">
+<!-- Toastify -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 {% endblock %}
 {% block title %} Kartia POS {% endblock %}
 
@@ -66,22 +68,27 @@
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, message in messages %}
       <script>
         document.addEventListener('DOMContentLoaded', () =>{
-          Swal.fire({
-            title: "Notificación!",
+          Toastify({
             text: "{{ message }}",
-            icon: "{{ category }}"
-          });
+            className: "{{ category }}",
+            style: {
+                background: "linear-gradient(to right, #b01500, #c93d3d)",
+            }
+          }).showToast();
         });
       </script>
     {% endfor %}
   {% endif %}
 {% endwith %}
 
-<script src="{{ url_for('static', filename='js/sweetalert2.all.min.js') }}"></script>
+
+<!-- <script src="{{ url_for('static', filename='js/sweetalert2.all.min.js') }}"></script> --> 
 <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 {% endblock %}
