@@ -1,46 +1,43 @@
 //Constantes
-const idUsuario = document.getElementById("idUsuario");
-const usuario = document.getElementById("usuario");
-const passwd = document.getElementById("passwd");
-const nomUsuario = document.getElementById("nomUsuario");
-const rolId = document.getElementById("rolId");
-//const isActive = document.querySelectorAll("input[name='isActive']");
-const modalUsuarios = document.getElementById("modalUsuarios");
-const btnNuevoUsuario = document.getElementById("btnNuevoUsuario");
+const modalCategorias = document.getElementById("modalCategorias");
+const formCategorias = document.getElementById("formCategorias");
+const idCategoria = document.getElementById("idCategoria");
+const codCategoria = document.getElementById("codCategoria");
+const nomCategoria = document.getElementById("nomCategoria");
+const btnNuevo = document.getElementById("btnNuevo");
 const searchInput = document.getElementById("searchInput");
 const btnGuardar = document.getElementById("btnGuardar");
 const btnActualizar = document.getElementById("btnActualizar");
 const btnCancelar = document.getElementById("btnCancelar");
-const formUsuarios = document.getElementById("formUsuarios");
 
 //Uppercase
-usuario.addEventListener("keyup", () => {
-    usuario.value = usuario.value.toUpperCase();
+codCategoria.addEventListener("keyup", () => {
+    codCategoria.value = codCategoria.value.toUpperCase();
 });
 
-nomUsuario.addEventListener("keyup", () => {
-    nomUsuario.value = nomUsuario.value.toUpperCase();
+nomCategoria.addEventListener("keyup", () => {
+    nomCategoria.value = nomCategoria.value.toUpperCase();
 });
 
-//Activar Modal Nuevo
+//Activar Modal
 const activarModal = () => {
-    modalUsuarios.classList.remove("is-hidden");
-    modalUsuarios.classList.add("is-active");
+    modalCategorias.classList.remove("is-hidden");
+    modalCategorias.classList.add("is-active");
 };
-btnNuevoUsuario.addEventListener("click", (e) => {
+btnNuevo.addEventListener("click", (e) => {
     e.preventDefault();
     activarModal();
-});
+})
 
 //Activar Modal Editar
 const activarModalEditar = (id) => {
-    modalUsuarios.classList.remove("is-hidden");
-    modalUsuarios.classList.add("is-active");
+    modalCategorias.classList.remove("is-hidden");
+    modalCategorias.classList.add("is-active");
     btnActualizar.classList.remove("is-hidden");
     btnActualizar.classList.add("is-active");
     btnGuardar.classList.remove("is-active");
     btnGuardar.classList.add("is-hidden");
-    fetch(`/getUsuarioId/${id}`, {
+    fetch(`/getCategoriasId/${id}`, {
         method: "GET"
     })
     .then(response => response.json())
@@ -50,48 +47,41 @@ const activarModalEditar = (id) => {
             return;
         };
 
-        data.forEach(usr => {
-            idUsuario.value = usr.idUsuario;
-            usuario.value = usr.usuario;
-            passwd.value = usr.passwd;
-            nomUsuario.value = usr.nomUsuario;
-            rolId.value = usr.rolId;
-            const estadoValor = String(usr.isActive);
-            const radioButton = document.querySelector(`input[name="isActive"][value="${estadoValor}"]`);
-            if(radioButton){
-                radioButton.checked = true;
-            };
-            btnActualizar.dataset.idOriginal = usr.idUsuario;
+        data.forEach(categoria => {
+            idCategoria.value = categoria.idCategoria;
+            codCategoria.value = categoria.codCategoria;
+            nomCategoria.value = categoria.nomCategoria;
+            btnActualizar.dataset.idOriginal = categoria.idCategoria;
         });
     })
-    .catch(error => console.error("error: ", error));
+    .catch(error => console.error("error: ", error))
 };
 
 //Desactivar Modal
 const desactivarModal = () => {
-    modalUsuarios.classList.remove("is-active");
-    modalUsuarios.classList.add("is-hidden");
+    modalCategorias.classList.add("is-hidden");
+    modalCategorias.classList.remove("is-active");
 };
 btnCancelar.addEventListener("click", (e) => {
     e.preventDefault();
-    formUsuarios.reset();
+    formCategorias.reset();
     desactivarModal();
 });
 
 //Datos en Tabla
-let allUsuarios = [];
-let filteredUsuarios = [];
+let allCategorias = [];
+let filteredCategorias = [];
 let currentPage = 1;
 const rowsPerPage = 5;
-const getUsuarios = async () => {
+const getCategorias = async () => {
     try {
-        const response = await fetch("/getUsuarios");
+        const response = await fetch("/getCategorias");
         if(!response.ok) throw new Error('Error cargando los datos');
 
         const result = await response.json();
-        allUsuarios = result;
+        allCategorias = result;
 
-        filteredUsuarios = [...allUsuarios];
+        filteredCategorias = [...allCategorias];
         renderTabla();
         renderPaginas();
     } catch (err) {
@@ -100,12 +90,12 @@ const getUsuarios = async () => {
 };
 
 const renderTabla = () => {
-    const tbody = document.getElementById("usuariosTbody");
+    const tbody = document.getElementById("categoriasTbody");
     tbody.innerHTML = '';
 
     const inicio = (currentPage - 1) * rowsPerPage;
     const fin = inicio + rowsPerPage;
-    const datosPagina = filteredUsuarios.slice(inicio, fin);
+    const datosPagina = filteredCategorias.slice(inicio, fin);
 
     if(datosPagina.length === 0) {
         tbody.innerHTML = `
@@ -114,17 +104,17 @@ const renderTabla = () => {
         return;  
     };
 
-    datosPagina.forEach(usuario => {
+    datosPagina.forEach(categoria => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${usuario.idUsuario}</td>
-            <td>${usuario.usuario}</td>
-            <td>${usuario.nomUsuario}</td>
+            <td>${categoria.idCategoria}</td>
+            <td>${categoria.codCategoria}</td>
+            <td>${categoria.nomCategoria}</td>
             <td>
-                <a onclick="activarModalEditar('${usuario.idUsuario}')" class="has-icon button is-small is-info has-tooltip-bottom" data-tooltip="Editar" style="padding: 0em 1.0em">
+                <a onclick="activarModalEditar('${categoria.idCategoria}')" class="has-icon button is-small is-info has-tooltip-bottom" data-tooltip="Editar" style="padding: 0em 1.0em">
                     <span class="icon"><i class="mdi mdi-pencil"></i></span>
                 </a>
-                <a onclick="eliminarUsuario('${usuario.idUsuario}')" class="has-icon button is-small is-danger has-tooltip-bottom" data-tooltip="Eliminar" style="padding: 0em 1.0em">
+                <a onclick="eliminarCategoria('${categoria.idCategoria}')" class="has-icon button is-small is-danger has-tooltip-bottom" data-tooltip="Eliminar" style="padding: 0em 1.0em">
                     <span class="icon"><i class="mdi mdi-trash-can"></i></span>
                 </a>
             </td>
@@ -138,7 +128,7 @@ const renderPaginas = () => {
     const paginacionList = document.getElementById("paginationList");
     paginacionList.innerHTML = '';
 
-    const totalPages = Math.ceil(filteredUsuarios.length / rowsPerPage);
+    const totalPages = Math.ceil(filteredCategorias.length / rowsPerPage);
     if (totalPages <= 1 ) return;
 
     for (let i = 1; i <= totalPages; i++) {
@@ -169,12 +159,12 @@ const renderPaginas = () => {
 //Filtrar Datos
 searchInput.addEventListener("input", (e) => {
     const termino = e.target.value.toLowerCase().trim();
-    filteredUsuarios = allUsuarios.filter(usuario => {
-        const id = String(usuario.idBodega || '').toLowerCase();
-        const user = String(usuario.usuario || '').toLowerCase();
-        const nombre = String(usuario.nomUsuario || '').toLowerCase();
+    filteredCategorias = allCategorias.filter(categoria => {
+        const id = String(categoria.idCategoria || '').toLowerCase();
+        const codigo = String(categoria.codCategoria || '').toLowerCase();
+        const nombre = String(categoria.nomCategoria || '').toLowerCase();
 
-        return id.includes(termino) || user.includes(termino) || nombre.includes(termino);
+        return id.includes(termino) || codigo.includes(termino) || nombre.includes(termino);
     });
 
     currentPage = 1;
@@ -182,18 +172,18 @@ searchInput.addEventListener("input", (e) => {
     renderPaginas();
 });
 
-// Async Guardar nuevo usuario
-formUsuarios.addEventListener("submit", async (e) => {
+//Async Guardar Nueva Categoria
+formCategorias.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const datosForm = new FormData(e.target);
+    const dataForm = new FormData(e.target);
     try {
-        const response = await fetch("/addUsuario", {
+        const response = await fetch("/addCategoria", {
             method: "POST",
-            body: datosForm
+            body: dataForm
         });
         const result = await response.json();
         if(!response.ok){
-            throw new Error(result.Error);
+            throw new Error(result.Error)
             Toastify({
                 text: `Se presentó un error: ${result.Error}`,
                 className: "error",
@@ -204,8 +194,8 @@ formUsuarios.addEventListener("submit", async (e) => {
             return;
         };
 
-        formUsuarios.reset();
-        getUsuarios();
+        formCategorias.reset();
+        getCategorias();
         desactivarModal();
         Toastify({
             text: `${result.message}`,
@@ -214,31 +204,32 @@ formUsuarios.addEventListener("submit", async (e) => {
                 background: "linear-gradient(to right, #00b09b, #96c93d)",
             }
         }).showToast();
-
+        
+        
     } catch (err) {
         console.error("error: ", err);
         Toastify({
-            text: `Se presentó un error: ${err}`,
+            text: `Se presentó un error: ${result.Error}`,
             className: "error",
             style: {
                 background: "linear-gradient(to right, #b01500, #c93d3d)",
             }
         }).showToast();
-    };
+    }
 });
 
-//Async Actualizar datos de usuario
+//Async Actualizar Categoria
 btnActualizar.addEventListener("click", async () => {
-    const datosForm = new FormData(formUsuarios);
+    const datosForm = new FormData(formCategorias);
     const idOriginal = btnActualizar.dataset.idOriginal;
     try {
-        const response = await fetch("/editUsuario", {
+        const response = await fetch("/editCategoria", {
             method: "POST",
             body: datosForm
         });
         const result = await response.json();
         if(!response.ok){
-            throw new Error(result.Error);
+            throw new Error(result.Error)
             Toastify({
                 text: `Se presentó un error: ${result.Error}`,
                 className: "error",
@@ -249,8 +240,8 @@ btnActualizar.addEventListener("click", async () => {
             return;
         };
 
-        formUsuarios.reset();
-        getUsuarios();
+        formCategorias.reset();
+        getCategorias();
         desactivarModal();
         Toastify({
             text: `${result.message}`,
@@ -263,20 +254,20 @@ btnActualizar.addEventListener("click", async () => {
     } catch (err) {
         console.error("error: ", err);
         Toastify({
-            text: `Se presentó un error: ${err}`,
+            text: `Se presentó un error: ${result.Error}`,
             className: "error",
             style: {
                 background: "linear-gradient(to right, #b01500, #c93d3d)",
             }
         }).showToast();
-    };
+    }
 });
 
-// Async Eliminar Usuario
-const eliminarUsuario = async (id) => {
-    if (confirm("Desea Eliminar este usuario del sistema ?")) {
+//Async Eliminar Categoria
+const eliminarCategoria = async (id) => {
+    if (confirm("Desea Eliminar esta categoría ?")) {
         try {
-            const response = await fetch(`/deleteUsuario/${id}`);
+            const response = await fetch(`/deleteCategoria/${id}`);
             const result = await response.json();
             if(!response.ok){
                 throw new Error(result.Error);
@@ -290,7 +281,7 @@ const eliminarUsuario = async (id) => {
                 return;
             };
 
-            getUsuarios();
+            getCategorias();
             Toastify({
                 text: `${result.message}`,
                 className: "success",
@@ -314,5 +305,5 @@ const eliminarUsuario = async (id) => {
 
 //Cargar Datos
 document.addEventListener("DOMContentLoaded", () => {
-    getUsuarios();
-});
+    getCategorias();
+})

@@ -5,6 +5,7 @@ from app.routes.index.index_routes import bp_index
 from app.routes.usuarios.perfilUsuarios_routes import bp_perfilUsuarios
 from app.routes.usuarios.usuarios_routes import bp_usuarios
 from app.routes.bodegas.bodegas_routes import bp_bodegas
+from app.routes.categorias.categorias_routes import bp_categorias
 
 
 def create_new():
@@ -17,6 +18,7 @@ def create_new():
     app.register_blueprint(bp_perfilUsuarios)
     app.register_blueprint(bp_usuarios)
     app.register_blueprint(bp_bodegas)
+    app.register_blueprint(bp_categorias)
 
     @app.before_request
     def verify():

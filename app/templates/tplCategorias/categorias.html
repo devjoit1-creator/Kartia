@@ -1,0 +1,98 @@
+{% extends 'menu.html' %}
+
+{% block css %}
+
+{% endblock %}
+{% block title %} Categorias de Productos {% endblock %}
+
+{% block content %}
+<h5 class="title is-5">Categorias de Productos</h5>
+<div class="container">
+    <div class="field is-grouped">
+        <p class="control">
+            <a id="btnNuevo" class="has-icon button is-normal is-primary">
+                <span class="icon"><i class="mdi mdi-plus"></i></span>
+                <span>Nueva Categoria</span>
+            </a>
+        </p>
+        <p class="control has-icons-left">
+            <input type="text" name="searchInput" id="searchInput" class="input is-normal" placeholder="Filtrar">
+            <span class="icon is-left"><i class="mdi mdi-table-search"></i></span>
+        </p>
+    </div>
+    <h6 class="title is-6">Listado de Categorias</h6>
+    <table class="table is-striped" style="width: 100%;">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Codigo</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="categoriasTbody">
+
+        </tbody>
+    </table>
+    <nav class="pagination is-small is-centered" role="navigation" aria-label="pagination">
+        <ul class="pagination-list" id="paginationList">
+
+        </ul>
+    </nav>
+</div>
+
+<!-- Modal Categorias -->
+<div id="modalCategorias" class="modal is-hidden">
+    <div class="modal-background"></div>
+    <form id="formCategorias" action="#" method="post">
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Datos de Categoria</p>
+            </header>
+            <section class="modal-card-body">
+                <input type="text" name="idCategoria" id="idCategoria" class="input is-small is-hidden" hidden>
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label for="codCategoria" class="label">Codigo: <strong style="color: red;">*</strong></label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <input type="text" name="codCategoria" id="codCategoria" class="input is-normal" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <label for="nomCategoria" class="label">Nombre: <strong style="color: red;">*</strong></label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <input type="text" name="nomCategoria" id="nomCategoria" class="input is-normal" required>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <div class="buttons">
+                    <button id="btnGuardar" type="submit" class="has-icon button is-normal is-success">
+                        <span class="icon"><i class="mdi mdi-floppy"></i></span>
+                        <span>Guardar</span>
+                    </button>
+                    <button id="btnActualizar" type="button" class="has-icon button is-normal is-success is-hidden">
+                        <span class="icon"><i class="mdi mdi-pencil"></i></span>
+                        <span>Actualizar</span>
+                    </button>
+                    <a id="btnCancelar" class="has-icon button is-normal is-danger">
+                        <span class="icon"><i class="mdi mdi-cancel"></i></span>
+                        <span>Cancelar</span>
+                    </a>
+                </div>
+            </footer>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/categorias/categorias.js') }}"></script>
+{% endblock %}
