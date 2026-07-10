@@ -185,9 +185,9 @@ formBodega.addEventListener("submit", async (e) => {
         const result = await response.json();
 
         if(!response.ok){
-            throw new Error(result.Error);
+            throw new Error(result.error);
             Toastify({
-                text: `Se presentó un error: ${result.Error}`,
+                text: `Se presentó un error: ${result.error}`,
                 className: "error",
                 style: {
                     background: "linear-gradient(to right, #b01500, #c93d3d)",
@@ -233,9 +233,9 @@ btnActualizar.addEventListener("click", async () => {
         const result = await response.json();
 
         if(!response.ok){
-            throw new Error(result.Error);
+            throw new Error(result.error);
             Toastify({
-                text: `Se presentó un error: ${result.Error}`,
+                text: `Se presentó un error: ${result.error}`,
                 className: "error",
                 style: {
                     background: "linear-gradient(to right, #b01500, #c93d3d)",
@@ -273,9 +273,9 @@ const eliminarBodega = async (id) => {
             const response = await fetch(`/deleteBodega/${id}`)
             const result = await response.json()
             if(!response.ok){
-                throw new Error(result.Error);
+                throw new Error(result.error);
                 Toastify({
-                    text: `Se presentó un error: ${result.Error}`,
+                    text: `Se presentó un error: ${result.error}`,
                     className: "error",
                     style: {
                         background: "linear-gradient(to right, #b01500, #c93d3d)",

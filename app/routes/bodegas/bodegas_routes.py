@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
-from app.services.bodegas import bodegas_service
+from app.services.bodegas import bodegas_services
 import mysql.connector.errors as error
 
 bp_bodegas = Blueprint("Bodegas", __name__)
@@ -11,7 +11,7 @@ def bodegas():
 @bp_bodegas.get('/getBodegas')
 def getBodegas():
     try:
-        bodegas = bodegas_service.listBodegas()
+        bodegas = bodegas_services.listBodegas()
         return jsonify(bodegas), 200
     
     except Exception as ex:
@@ -20,7 +20,7 @@ def getBodegas():
 @bp_bodegas.get('/getBodegasId/<id>')
 def getBodegasId(id):
     try:
-        bodega = bodegas_service.listBodegaId(id)
+        bodega = bodegas_services.listBodegaId(id)
         if bodega:
             return jsonify(bodega), 200
         else:
@@ -34,7 +34,7 @@ def addBodega():
     try:
         idBodega = request.form.get("idBodega")
         nomBodega = request.form.get("nomBodega")
-        bodegas_service.insertBodega(idBodega, nomBodega)
+        bodegas_services.insertBodega(idBodega, nomBodega)
 
         return jsonify({"message": "Bodega Creada Exitosamente"}), 201
     
@@ -49,7 +49,7 @@ def editBodega():
     try:
         nomBodega = request.form.get("nomBodega")
         idBodega = request.form.get("idBodega")
-        bodegas_service.updateBodega(nomBodega, idBodega)
+        bodegas_services.updateBodega(nomBodega, idBodega)
         
         return jsonify({"message": "Bodega Actualizada Exitosamente"}), 200
     
@@ -62,7 +62,7 @@ def editBodega():
 @bp_bodegas.get('/deleteBodega/<id>')
 def deleteBodega(id):
     try:
-        bodegas_service.deleteBodega(id)
+        bodegas_services.deleteBodega(id)
         return jsonify({"message": "Bodega Eliminada Exisotamente"}), 200
     
     except error.Error as e:
