@@ -170,7 +170,7 @@ const renderPaginas = () => {
 searchInput.addEventListener("input", (e) => {
     const termino = e.target.value.toLowerCase().trim();
     filteredUsuarios = allUsuarios.filter(usuario => {
-        const id = String(usuario.idBodega || '').toLowerCase();
+        const id = String(usuario.idUsuario || '').toLowerCase();
         const user = String(usuario.usuario || '').toLowerCase();
         const nombre = String(usuario.nomUsuario || '').toLowerCase();
 

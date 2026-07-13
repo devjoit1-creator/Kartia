@@ -24,8 +24,9 @@
     <table class="table is-striped" style="width: 100%;">
         <thead>
             <tr>
+                <th scope="col">ID</th>
                 <th scope="col">Codigo</th>
-                <th scope="col">Descripción</th>
+                <th scope="col">Nombre</th>
                 <th scope="col">Acciones</th>
             </tr>
         </thead>
@@ -95,7 +96,10 @@
                     </div>
                     <div class="field-body">
                         <div class="field">
-                            <input type="number" name="precioCompra" id="precioCompra" class="input is-small" required>
+                            <p class="control has-icons-left">
+                                <input type="number" name="precioCompra" id="precioCompra" class="input is-small" required>
+                                <span class="icon is-left"><i class="mdi mdi-currency-usd"></i></span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -105,7 +109,10 @@
                     </div>
                     <div class="field-body">
                         <div class="field">
-                            <input type="number" name="precioVenta" id="precioVenta" class="input is-small" required>
+                            <p class="control has-icons-left">
+                                <input type="number" name="precioVenta" id="precioVenta" class="input is-small" required>
+                                <span class="icon is-left"><i class="mdi mdi-currency-usd"></i></span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -155,7 +162,7 @@
                     </button>
                     <button id="btnActualizar" type="button" class="button is-normal is-success is-hidden">
                         <span class="icon"><i class="mdi mdi-pencil"></i></span>
-                        <span>Guardar</span>
+                        <span>Actualizar</span>
                     </button>
                     <a id="btnCancelar" class="button is-normal is-danger">
                         <span class="icon"><i class="mdi mdi-cancel"></i></span>
